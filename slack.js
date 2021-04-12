@@ -46,7 +46,7 @@ const SlackApi = (url, token) => {
 }
 const getUserDetails = () => {
     const url = 'https://slack.com/api/auth.test?pretty=1'
-    const token = 'xoxp-955599270594-958273793553-1942882268278-a3e7346caf7a8602af9d4a4b788da74f'
+    const token = 'xoxp-955599270594-958273793553-1936048717863-b6b511a54624495028f7e6a2dac276a8'
     SlackApi(url, token)
 }
 
