@@ -1,4 +1,10 @@
 const chalk = require('chalk');
+require('dotenv').config()
+
+const SLACK_URL = process.env.SLACK_URL
+const SLACK_TOKEN = process.env.SLACK_TOKEN
+const SLACK_CHANNEL_URL = process.env.SLACK_CHANNEL_URL
+const commands = ['user', 'u', 'dynamic-url', 'du', 'channel-msg', 'cm', 'dynamic-channel-msg', 'dcm']
 
 const eventApis = (url, msg) => {
     var request = require('request');
@@ -15,10 +21,10 @@ const eventApis = (url, msg) => {
         if (error) {
             const errLog = chalk.red(`error: , ${error.message}`)
             console.info(errLog)
-        };
-        console.log(response.body);
-        const log = chalk.green('Boom. Message posted successfully')
-        console.info(log)
+        } else {
+            const log = chalk.green('Boom. Message posted successfully')
+            console.info(log)
+        }
     });
 }
 
@@ -38,15 +44,16 @@ const SlackApi = (url, token) => {
             const errLog = chalk.red(`error: , ${error.message}`)
             console.info(errLog)
         };
-        const log = chalk.green('details: ')
+        const log = chalk.green(response.body)
         console.info(log)
         console.log(response.body);
-        
+
     });
 }
+
 const getUserDetails = () => {
-    const url = 'https://slack.com/api/auth.test?pretty=1'
-    const token = 'xoxp-955599270594-958273793553-1936048717863-b6b511a54624495028f7e6a2dac276a8'
+    const url = SLACK_URL
+    const token = SLACK_TOKEN
     SlackApi(url, token)
 }
 
@@ -55,9 +62,8 @@ const getAPIResponse = (url, token) => {
 }
 
 const postMessageToChannel = () => {
-    const url = 'https://hooks.slack.com/services/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'
     const msg = 'Hello Slack'
-    eventApis(url, msg)
+    eventApis(SLACK_CHANNEL_URL, msg)
 }
 
 const postMessageToDynamicalUrl = (url, message) => {
@@ -68,5 +74,6 @@ module.exports = {
     postMessageToChannel,
     postMessageToDynamicalUrl,
     getUserDetails,
-    getAPIResponse
+    getAPIResponse,
+    commands
 }

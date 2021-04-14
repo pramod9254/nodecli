@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const program = require('commander');
 const { prompt } = require('inquirer');
-const { postMessageToChannel, postMessageToDynamicalUrl, getUserDetails, getAPIResponse } = require('./slack');
-
+const { postMessageToChannel, postMessageToDynamicalUrl, getUserDetails, getAPIResponse, commands } = require('./slack');
+const chalk = require('chalk');
 const questions = [{
     type: 'input',
     name: 'url',
@@ -36,8 +36,8 @@ program
     .action(() => getUserDetails())
 
 program
-    .command('api')
-    .alias('aa')
+    .command('dynamic-url')
+    .alias('du')
     .description(`Provide url and token to fetch details`)
     .action(() => {
         prompt(questionsForUserDetails).then(answers => {
@@ -46,14 +46,14 @@ program
     })
   
 program
-    .command('send')
-    .alias('s')
+    .command('channel-msg')
+    .alias('cm')
     .description(`Send 'Hello Slack' message to 'B01UA54EPQ9' channel`)
     .action(() => postMessageToChannel())
 
 program
-    .command('sendtodynamicurl')
-    .alias('stdu')
+    .command('dynamic-channel-msg')
+    .alias('dcm')
     .description('Add URL and Message to send to user')
     .action(() => {
         prompt(questions).then(answers => {
@@ -61,5 +61,15 @@ program
         });
     })
 
+if(process.argv.length != 3 ) {
+    const errLog = chalk.red(`Error: Comand not found`)
+    console.info(errLog)
+    return false
+} 
 
+if(commands.indexOf(process.argv[2]) == -1) {
+    const errLog = chalk.red(`Error: Invalid command`)
+    console.info(errLog)
+    return false
+} 
 program.parse(process.argv)
